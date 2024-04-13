@@ -1,0 +1,32 @@
+<mat-card>
+  <mat-card-title>Players Info</mat-card-title>
+  <mat-table [dataSource]="players" class="mat-elevation-z8">
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+      <mat-cell *matCellDef="let player"> {{player.name}} </mat-cell>
+    </ng-container>
+  
+    <!-- Overall Score Column -->
+    <ng-container matColumnDef="score">
+      <mat-header-cell *matHeaderCellDef> Overall Score </mat-header-cell>
+      <mat-cell *matCellDef="let player"> {{player.score}} </mat-cell>
+    </ng-container>
+  
+    <!-- Rating Column -->
+    <ng-container matColumnDef="rating">
+      <mat-header-cell *matHeaderCellDef> Rating </mat-header-cell>
+      <mat-cell *matCellDef="let player"> {{player.rating}} </mat-cell>
+    </ng-container>
+  
+    <!-- Rank Column -->
+    <ng-container matColumnDef="rank">
+      <mat-header-cell *matHeaderCellDef> Rank </mat-header-cell>
+      <mat-cell *matCellDef="let player"> {{player.rank}} </mat-cell>
+    </ng-container>
+  
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+</mat-card>

@@ -1,0 +1,32 @@
+
+
+<!-- game-history.component.html -->
+<h2>Game History[WIP]</h2>
+
+<mat-card *ngIf="gameHistory && gameHistory.length; else noHistory">
+  <ul>
+    <li *ngFor="let game of gameHistory; let i = index">
+        <mat-card>
+                <h3>Game {{ i + 1 }} to be replaced with GameID and date</h3>
+        <p>Number of Players: {{ game.players.length }}</p>
+        <p>Number of Holes: {{ game.holes.length }} will also indicate course</p>
+        <!-- Optionally display more details about each game -->
+        <div *ngFor="let player of game.players">
+            <mat-card>
+              <p>Player: {{ player.name }}</p>
+              <ul>
+                <li *ngFor="let hole of game.holes">
+                  Hole {{ hole.number }} (Par {{ hole.par }}): 
+                  Score: {{ getScore(game.scores, player.id, hole.number) }}
+                </li>
+              </ul>
+            </mat-card>
+          </div>
+        </mat-card>
+    </li>
+  </ul>
+</mat-card>
+
+<ng-template #noHistory>
+  <p>No game history available.</p>
+</ng-template>

@@ -1,0 +1,55 @@
+
+<mat-card>
+  <mat-card-header>
+    <h1> Select Players </h1>
+  </mat-card-header>
+  
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="checkbox-container" formArrayName="playersCheckboxes">
+        <div *ngFor="let control of playersFormArray.controls; let i = index" class="checkbox-item">
+          <label>
+            <mat-checkbox [formControlName]="i"> {{ players[i].name }}</mat-checkbox>
+          </label>
+        </div>
+      </div>
+      <button mat-stroked-button type="submit">Confirm Players</button>
+    </form>
+  </mat-card-content>
+
+</mat-card>
+
+
+<mat-card *ngIf="gameStarted">
+  <app-game></app-game>
+</mat-card>
+
+
+
+
+<!-- <app-game *ngIf="gameStarted"></app-game> -->
+<!-- <mat-card>
+
+    <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Score</th>
+            <th>Rating</th>
+            <th>Rank</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let player of players">
+            <td>{{ player.id }}</td>
+            <td>{{ player.name }}</td>
+            <td>{{ player.score }}</td>
+            <td>{{ player.rating }}</td>
+            <td>{{ player.rank }}</td>
+          </tr>
+        </tbody>
+    </table>
+</mat-card> -->
+
+

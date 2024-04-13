@@ -1,0 +1,67 @@
+<mat-card *ngIf="game">
+  <mat-card-header>
+    <mat-card-title>Players in game: {{ game.players.length }}</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <!-- Add more game display logic here, like input fields for scores -->
+    <!-- should probably move this logic to the round page so that you can generate teams and start games at the same time...-->
+    <div class="grid-container">
+      <button mat-stroked-button (click)="onGenerateTeams()">Generate Random Teams</button>
+      <button mat-stroked-button (click)="onSoloTeams()">Generate Solo Teams</button>
+    </div>
+    <ol class="horizontal-list">
+      <li *ngFor="let player of game.players">{{ player.name }}</li>
+    </ol>
+    
+    <div *ngFor="let team of teams; let i = index" class="team-list">
+      <h3>Team {{i + 1}}:</h3>
+      <ol class="horizontal-list">
+          <li *ngFor="let player of team">{{ player.name }}</li>
+      </ol>
+    </div>
+
+  </mat-card-content>
+</mat-card>
+
+<mat-card>
+  <div *ngIf="game">
+    <mat-card-header>
+      <mat-card-title>Scorecard</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-table [dataSource]="teams">
+
+        <!-- Team Names Column -->
+        <ng-container matColumnDef="team">
+          <mat-header-cell *matHeaderCellDef> Teams </mat-header-cell>
+          <mat-cell *matCellDef="let team">
+            <ul class="player-list">  
+              <li *ngFor="let player of team">{{ player.name }}</li>
+            </ul>
+          </mat-cell>
+        </ng-container>
+        <!-- Dynamic Columns for Holes -->
+        <ng-container *ngFor="let hole of game.holes" [matColumnDef]="hole.name">
+          <mat-header-cell *matHeaderCellDef> 
+            <div>{{ hole.name }}</div>
+            <div>(Par {{ hole.par }}) </div>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let team; let i = index">
+            <div class="score-control">
+              <input type="number" [(ngModel)]="teamScores[i][game.holes.indexOf(hole)]">
+            </div>
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+    </mat-card-content>
+  
+    <mat-card-content>
+      <button mat-stroked-button (click)="submitScorecard(this.game)">Submit scores</button>
+    </mat-card-content>
+  </div>
+</mat-card>
+
+  

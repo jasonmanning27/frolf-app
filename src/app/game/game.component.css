@@ -1,0 +1,79 @@
+/* Add border to the entire table */
+table {
+    border-collapse: collapse; /* Ensures borders between cells are shared */
+    width: 100%; /* Optional: Adjust based on your layout needs */
+  }
+  
+  /* Add border to each table cell and header cell */
+  th, td {
+    border: 1px solid black; /* Adjust color and thickness as needed */
+    text-align: left; /* Optional: Adjust text alignment as needed */
+    padding: 8px; /* Optional: Adjust padding inside cells as needed */
+  }
+  
+  /* Style the header row */
+  thead th {
+    background-color: #f2f2f2; /* Optional: Adds a background color to header cells */
+    color: black; /* Optional: Adjust header text color as needed */
+  }
+  
+  /* Style for alternate row colors, optional */
+  tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+/* button {
+    font-size: 2em;
+} */
+
+.mat-header-cell, .mat-cell {
+  padding: 5px; /* Increase padding as needed */
+}
+
+/* Optionally, you might want to adjust the text alignment or other styles */
+.mat-header-cell {
+  font-weight: bold; /* Makes header text bold */
+  background-color: #f0f0f0; /* Adds a background color to header cells */
+  text-align: center
+
+}
+
+.mat-cell {
+  background-color: #fff; /* Adds a background color to data cells */
+
+}
+
+/* Custom styles for player list inside mat-cell */
+.player-list {
+  list-style-type: none; /* Removes the default bullet points */
+  padding: 0; /* Removes default padding */
+  margin: 0; /* Removes default margin */
+}
+
+.player-list li {
+  padding: 10px 5px; /* Adds padding around the text of each list item */
+}
+
+.player-list li::before {
+  content: ""; /* Adds a dash before the text */
+  padding-right: 5px; /* Adds spacing after the dash */
+}
+
+.team-list {
+  margin-bottom: 20px; /* Adds spacing between each team's list */
+}
+
+.horizontal-list {
+  display: flex; /* This will make the list horizontal */
+  list-style-type: none; /* Removes default list styling */
+  padding: 0; /* Removes default padding */
+  overflow-x: auto; /* Adds horizontal scrolling if list is too long */
+  white-space: nowrap; /* Ensures items don't wrap to the next line */
+}
+
+.horizontal-list li {
+  margin-right: 15px; /* Adds spacing between list items */
+  background-color: #f0f0f0; /* Light grey background for each item */
+  padding: 5px 10px; /* Padding around text in each item */
+  border-radius: 5px; /* Optional: rounds the corners of each item */
+}
