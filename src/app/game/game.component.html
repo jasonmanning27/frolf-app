@@ -1,3 +1,4 @@
+
 <mat-card *ngIf="game">
   <mat-card-header>
     <mat-card-title>Players in game: {{ game.players.length }}</mat-card-title>
@@ -20,9 +21,75 @@
           <li *ngFor="let player of team">{{ player.name }}</li>
       </ol>
     </div>
-
   </mat-card-content>
+
 </mat-card>
+
+<mat-card>
+  <h1>Test Rounds Scorecard</h1>
+  <mat-table [dataSource]="gameWithRounds?.rounds || []" class="mat-elevation-z8">
+
+    <!-- Teams Column -->
+    <ng-container matColumnDef="teams">
+      <mat-header-cell *matHeaderCellDef> Teams </mat-header-cell>
+      <mat-cell *matCellDef="let round">
+        <ng-container *ngFor="let player of round.players; let isLast = last">
+          {{ player.name }}<ng-container *ngIf="!isLast">, </ng-container>
+        </ng-container>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Dynamic Columns for Holes -->
+    <ng-container *ngFor="let hole of gameHoles" [matColumnDef]="hole.name">
+      <mat-header-cell *matHeaderCellDef> 
+        {{ hole.name }} (Par {{ hole.par }})
+      </mat-header-cell>
+      <mat-cell *matCellDef="let round; let i = index">
+        <input type="number" [(ngModel)]="round.scores[i]">
+      </mat-cell>
+    </ng-container>
+
+    <!-- Header and Row Definitions -->
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+  <button mat-stroked-button (click)="submitRoundsScorecard(gameWithRounds)">Submit scores</button>
+</mat-card>
+
+<!-- TEST -->
+<mat-card>
+  <h1>Test Rounds Scorecard</h1>
+  <table>
+    <!-- Generate header only once, assuming all rounds have the same hole structure -->
+    <tr>
+      <th>Teams</th>
+      <th *ngFor="let hole of this.gameHoles">
+        {{ hole.name }} (Par {{ hole.par }})
+      </th>
+    </tr>
+    <!-- Generate a row for each round -->
+    <ng-container *ngFor="let round of gameWithRounds?.rounds; let teamIndex = index">
+      <tr>
+           <!-- New column for displaying team players -->
+           <td>
+            <!-- You can customize how you want to display the player names -->
+            <ng-container *ngFor="let player of round.players; let isLast = last">
+              {{ player.name }}<ng-container *ngIf="!isLast">, </ng-container>
+            </ng-container>
+          </td>
+        <!-- Input row for scores of each round -->
+        <td *ngFor="let score of round.scores; let i = index">
+          <div class="score-control">
+            <input type="number" [(ngModel)]="round.numScore[i]">
+          </div>
+        </td>
+      </tr>
+    </ng-container>
+  </table>
+  <button mat-stroked-button (click)="submitRoundsScorecard(this.gameWithRounds)">Submit scores</button>
+</mat-card>
+<!-- TEST -->
+
 
 <mat-card>
   <div *ngIf="game">
@@ -31,7 +98,6 @@
     </mat-card-header>
     <mat-card-content>
       <mat-table [dataSource]="teams">
-
         <!-- Team Names Column -->
         <ng-container matColumnDef="team">
           <mat-header-cell *matHeaderCellDef> Teams </mat-header-cell>
@@ -59,8 +125,10 @@
     </mat-card-content>
   
     <mat-card-content>
-      <button mat-stroked-button (click)="submitScorecard(this.game)">Submit scores</button>
+      <button mat-stroked-button (click)="submitRoundsScorecard(this.gameWithRounds)">Submit scores</button>
     </mat-card-content>
+
+    <!-- This will be converted to a round widget to make this a simpler file -->
   </div>
 </mat-card>
 

@@ -22,6 +22,7 @@ export const OLD_HOLES: Hole[] = [
   { number: 17, name: "DTH Box", par: 3 },
   { number: 18, name: "Memorial Hall", par: 3 }
 ];
+export const par_old_holes: number = 62;
 
 export const NEW_HOLES: Hole[] = [
     { number: 1, name: "ROTC", par: 3 },
@@ -46,3 +47,4 @@ export const NEW_HOLES: Hole[] = [
     { number: 20, name: "Back to ROTC Flag pole", par: 5 }
   ];
 
+export const par_new_holes: number = 70;

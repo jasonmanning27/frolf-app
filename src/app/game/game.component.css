@@ -77,3 +77,9 @@ table {
   padding: 5px 10px; /* Padding around text in each item */
   border-radius: 5px; /* Optional: rounds the corners of each item */
 }
+
+.horizontal-list div {
+  background-color: #f0f0f0; /* Light grey background for each item */
+  padding: 5px 10px; /* Padding around text in each item */
+  border-radius: 5px; /* Optional: rounds the corners of each item */
+}

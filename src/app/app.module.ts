@@ -17,6 +17,9 @@ import { FormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { GameHistoryComponent } from './game-history/game-history.component';
+import { RoundComponent } from './round/round.component';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 
@@ -27,7 +30,8 @@ import { GameHistoryComponent } from './game-history/game-history.component';
     NewGameComponent,
     PlayersComponent,
     GameComponent,
-    GameHistoryComponent
+    GameHistoryComponent,
+    RoundComponent
   ],
   imports: [
     BrowserModule,
@@ -40,6 +44,8 @@ import { GameHistoryComponent } from './game-history/game-history.component';
     MatButtonModule,
     MatTableModule,
     MatCheckboxModule,
+    MatExpansionModule,
+    MatDialogModule, 
   ],
   providers: [
     provideClientHydration(),
