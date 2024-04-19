@@ -14,6 +14,7 @@ export class GameService {
 
   private gameSubject = new BehaviorSubject<Game | null>(null);
   game$ = this.gameSubject.asObservable();
+  static lastGameID = 0; // Static variable to keep track of the last game ID
 
   //private gamesHistory: Game[] = []; // Array to store the history of games
   private gamesRoundsHistory: GameWithRounds[] = []; // Array to store the history of games
@@ -33,18 +34,30 @@ export class GameService {
   // Support method
   submitRound(rounds: GameWithRounds | null) {
     if(rounds != null) {
-      this.gamesRoundsHistory.push(rounds); // Store the new game in history
-      console.log("Pushing [", rounds.rounds.length,"] rounds to history")
       for (let round of rounds.rounds) {
+        round.overall_score = this.calculateOverallScore(round.score_array);
         let players = round.players;
         console.log("Players in round:", players); // Now correctly accessing players
         for(let player of players) {
           console.log(player);
-          this.playerService.updateScore(player.id, round.numScore[0]);
+          this.playerService.updateScore(player.id, round.overall_score);
         }
       }
+      this.gamesRoundsHistory.push(rounds); // Store the new game in history
+      console.log("Pushing [", rounds.rounds.length,"] rounds to history")
+
+    } 
+  }
+  calculateOverallScore(scores: number[]): number {
+    let parScore = 0;
+    for (let i = 0; i < scores.length; i++) {
+      const score = scores[i];
+      if (score !== 0) {  // Ensures that only holes with a recorded score are calculated
+        parScore += score - NEW_HOLES[i].par;  // Adjusts the total score compared to the par of the hole
+      }
     }
-    
+    return parScore;
+    return scores.reduce((acc, current) => acc + current, 0);
   }
 
   updatePlayerInfo(): void {
@@ -138,8 +151,8 @@ export class GameService {
       players: [this.playerService.getPlayerByName("Matthew McKnight"),
                 this.playerService.getPlayerByName("Eli Fried")
       ],
-      scores: [],
-      numScore: [3, 3, 3, 3, 7, 3, 5, 3, 3,
+      overall_score: 30,
+      score_array: [3, 3, 3, 3, 7, 3, 5, 3, 3,
                  2, 3, 3, 4, 3, 3, 2, 4, 2, 
                  2, 1
       ],
@@ -151,8 +164,8 @@ export class GameService {
       players: [this.playerService.getPlayerByName("Rachel Yao"),
                 this.playerService.getPlayerByName("Daniel Zhang")
       ],
-      scores: [],
-      numScore: [3, 3, 3, 3, 3, 3, 3, 11, 3,
+      overall_score: 30,
+      score_array: [3, 3, 3, 3, 3, 3, 3, 11, 3,
                  2, 3, 3, 4, 3, 3, 10, 4, 2, 
                  2, 1
       ],
@@ -165,8 +178,8 @@ export class GameService {
                 this.playerService.getPlayerByName("Keller Fraley"),
                 this.playerService.getPlayerByName("Andrew Fan")
       ],
-      scores: [],
-      numScore: [3, 3, 3, 3, 3, 6, 3, 3, 3,
+      overall_score: 30,
+      score_array: [3, 3, 3, 3, 3, 6, 3, 3, 3,
                  2, 3, 3, 4, 3, 4, 2, 4, 2, 
                  2, 1
       ],
@@ -178,8 +191,8 @@ export class GameService {
       players: [this.playerService.getPlayerByName("Jason Manning"),
                 this.playerService.getPlayerByName("Seth Fried")
       ],
-      scores: [],
-      numScore: [2, 3, 3, 3, 0, 4, 3, 3, 3,
+      overall_score: 30,
+      score_array: [2, 3, 3, 3, 0, 4, 3, 3, 3,
                  3, 4, 5, 2, 3, 3, 4, 3, 3, 
                  3, 4
                 ],
@@ -191,8 +204,8 @@ export class GameService {
       players: [this.playerService.getPlayerByName("Min Lim"),
                 this.playerService.getPlayerByName("Arjun Deshmukh")
       ],
-      scores: [],
-      numScore: [3, 3, 3, 8, 3, 3, 10, 3, 3,
+      overall_score: 30,
+      score_array: [3, 3, 3, 8, 3, 3, 10, 3, 3,
                  2, 3, 3, 4, 3, 3, 2, 4, 2, 
                  2, 1
                 ],
@@ -204,15 +217,21 @@ export class GameService {
       players: [this.playerService.getPlayerByName("Jack McCleary"),
                 this.playerService.getPlayerByName("Max Goetz")
       ],
-      scores: [],
-      numScore: [3, 3, 3, 3, 3, 3, 3, 3, 3,
+      overall_score: 30,
+      score_array: [3, 3, 3, 3, 3, 3, 3, 3, 3,
                  2, 3, 3, 4, 3, 3, 2, 4, 2, 
                  3, 5
       ],
       holes: NEW_HOLES,
     }
     const dummyData: GameWithRounds = {
-      rounds: [round1, round2, round3, round4, round5, round6]
+      rounds: [round1, round2, round3, round4, round5, round6],
+      gameID: 1,
+      date: "April 16",
+      winner: [this.playerService.getPlayerByName("Abby Stevens"),
+               this.playerService.getPlayerByName("Keller Fraley"),
+               this.playerService.getPlayerByName("Andrew Fan")
+              ]
     }
     this.gamesRoundsHistory.push(dummyData);
   }

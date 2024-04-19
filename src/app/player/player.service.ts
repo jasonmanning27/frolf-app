@@ -47,8 +47,12 @@ export class PlayerService {
     return this.players;
   }
 
-  getPlayer(id: number): Player | undefined {
-    return this.players.find(player => player.id === id);
+  getPlayer(id: number): Player {
+    const player = this.players.find(player => player.id === id);
+    if (!player) {
+      throw new Error(`Player with name ${id} not found`);
+  }
+    return player;
   }
 
   getPlayerByName(name: string): Player {
@@ -66,11 +70,11 @@ export class PlayerService {
 
 
   updateScore(id: number, score: number): void {
-    let player =this.players.find(player => player.id === id);
+    let player = this.players.find(player => player.id === id);
     if(player) {
-      console.log("current player score: ", player.score)
+      console.log(player.name, ": Current Score: ", player.score)
       player.score = player.score + score;
-      console.log("updated player score: ", player.score)
+      console.log(player.name, ": Updated Score: ", player.score)
     }
   }
   // Additional methods as needed (e.g., deletePlayer, updatePlayer)

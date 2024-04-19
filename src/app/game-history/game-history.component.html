@@ -10,7 +10,7 @@
   <mat-expansion-panel class="no-shadow" *ngFor="let game of gameWithRoundsHistory">
     <mat-expansion-panel-header>
       <mat-panel-title>
-        Game ID will go here - {{ soloTeamLabel(game.rounds[0].soloGame) }} - {{ game.rounds[0].date }} - Winner will go here
+        Game ID: {{ game.gameID }} - {{ soloTeamLabel(game.rounds[0].soloGame) }} - {{ game.date }} - Winner will go here
       </mat-panel-title>
       <mat-panel-description>
         Click to view rounds
@@ -38,13 +38,13 @@
       <!-- Round Score Column -->
       <ng-container matColumnDef="roundScore">
         <mat-header-cell *matHeaderCellDef> Round Score </mat-header-cell>
-        <mat-cell *matCellDef="let round"> {{ sumScore(round.numScore) }} ( {{sumScore(round.numScore) - par_new}} ) </mat-cell>
+        <mat-cell *matCellDef="let round"> {{ round.overall_score  }} ( {{round.overall_score - par_new}} ) </mat-cell>
       </ng-container>
   
       <!-- Scores Column -->
       <ng-container matColumnDef="scores">
         <mat-header-cell *matHeaderCellDef> Scores </mat-header-cell>
-        <mat-cell *matCellDef="let round"> {{ round.numScore }} </mat-cell>
+        <mat-cell *matCellDef="let round"> {{ round.score_array }} </mat-cell>
       </ng-container>
   
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
