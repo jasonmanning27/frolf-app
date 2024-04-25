@@ -4,16 +4,16 @@
 
 <mat-card>
   <mat-card-header class="game-header">
-    <mat-card-title>Game List</mat-card-title>
-    <mat-card-subtitle>Overview of all games</mat-card-subtitle>
+    <mat-card-title>All Game History</mat-card-title>
+    <mat-card-subtitle>Click on a game to see more</mat-card-subtitle>
   </mat-card-header>
   <mat-expansion-panel class="no-shadow" *ngFor="let game of gameWithRoundsHistory">
     <mat-expansion-panel-header>
       <mat-panel-title>
-        Game ID: {{ game.gameID }} - {{ soloTeamLabel(game.rounds[0].soloGame) }} - {{ game.date }} - Winner will go here
+        Game ID: {{ game.gameID }} - {{ soloTeamLabel(game.rounds[0].soloGame) }} - {{ game.date }} - {{ winnerString(game) }}
       </mat-panel-title>
       <mat-panel-description>
-        Click to view rounds
+        expand rounds
       </mat-panel-description>
     </mat-expansion-panel-header>
     <mat-table [dataSource]="game.rounds">
@@ -38,7 +38,7 @@
       <!-- Round Score Column -->
       <ng-container matColumnDef="roundScore">
         <mat-header-cell *matHeaderCellDef> Round Score </mat-header-cell>
-        <mat-cell *matCellDef="let round"> {{ round.overall_score  }} ( {{round.overall_score - par_new}} ) </mat-cell>
+        <mat-cell *matCellDef="let round"> {{ round.overall_score + par_new }} ( {{plusOrMinus(round.overall_score)}} ) </mat-cell>
       </ng-container>
   
       <!-- Scores Column -->

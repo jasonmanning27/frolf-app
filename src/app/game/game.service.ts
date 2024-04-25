@@ -11,7 +11,7 @@ import { PlayerService } from '../player/player.service';
 })
 
 export class GameService {
-
+  private static lastGameId = 0;  // Static property to track last game ID
   private gameSubject = new BehaviorSubject<Game | null>(null);
   game$ = this.gameSubject.asObservable();
   static lastGameID = 0; // Static variable to keep track of the last game ID
@@ -32,9 +32,15 @@ export class GameService {
   // }
 
   // Support method
-  submitRound(rounds: GameWithRounds | null) {
-    if(rounds != null) {
-      for (let round of rounds.rounds) {
+  submitRound(game: GameWithRounds | null) {
+    if(game != null) {
+
+      game.gameID = ++GameService.lastGameId;
+      // Set the current date and time
+      game.date = new Date().toISOString();
+
+      
+      for (let round of game.rounds) {
         round.overall_score = this.calculateOverallScore(round.score_array);
         let players = round.players;
         console.log("Players in round:", players); // Now correctly accessing players
@@ -43,8 +49,9 @@ export class GameService {
           this.playerService.updateScore(player.id, round.overall_score);
         }
       }
-      this.gamesRoundsHistory.push(rounds); // Store the new game in history
-      console.log("Pushing [", rounds.rounds.length,"] rounds to history")
+      game.winner = this.getWinner(game);
+      this.gamesRoundsHistory.push(game); // Store the new game in history
+      console.log("Pushing [", game.rounds.length,"] rounds to history")
 
     } 
   }
@@ -57,11 +64,28 @@ export class GameService {
       }
     }
     return parScore;
-    return scores.reduce((acc, current) => acc + current, 0);
   }
 
-  updatePlayerInfo(): void {
-
+  getWinner(rounds: GameWithRounds) {
+    let max = rounds.rounds[0].overall_score;
+    let winner: Player[] = [];
+    for(let round of rounds.rounds){
+      if(round.overall_score == max) {
+        for(let player of round.players) {
+          winner[winner.length] = player;
+        }
+      } else if(round.overall_score < max) {
+        max = round.overall_score
+        //console.log("replacing winner: ", winner)
+        winner = [];
+        for(let player of round.players) {
+          winner[winner.length] = player;
+        }
+        //console.log("with: ", winner)
+      }
+    }
+    console.log("Get Winner: " + winner)
+    return winner;
   }
 
   getGamesRoundHistory(): GameWithRounds[] {
@@ -151,7 +175,7 @@ export class GameService {
       players: [this.playerService.getPlayerByName("Matthew McKnight"),
                 this.playerService.getPlayerByName("Eli Fried")
       ],
-      overall_score: 30,
+      overall_score: -8,
       score_array: [3, 3, 3, 3, 7, 3, 5, 3, 3,
                  2, 3, 3, 4, 3, 3, 2, 4, 2, 
                  2, 1
@@ -164,11 +188,11 @@ export class GameService {
       players: [this.playerService.getPlayerByName("Rachel Yao"),
                 this.playerService.getPlayerByName("Daniel Zhang")
       ],
-      overall_score: 30,
       score_array: [3, 3, 3, 3, 3, 3, 3, 11, 3,
                  2, 3, 3, 4, 3, 3, 10, 4, 2, 
                  2, 1
       ],
+      overall_score: 2,
       holes: NEW_HOLES,
     }
     const round3: Round = {
@@ -178,7 +202,7 @@ export class GameService {
                 this.playerService.getPlayerByName("Keller Fraley"),
                 this.playerService.getPlayerByName("Andrew Fan")
       ],
-      overall_score: 30,
+      overall_score: -10,
       score_array: [3, 3, 3, 3, 3, 6, 3, 3, 3,
                  2, 3, 3, 4, 3, 4, 2, 4, 2, 
                  2, 1
@@ -191,7 +215,7 @@ export class GameService {
       players: [this.playerService.getPlayerByName("Jason Manning"),
                 this.playerService.getPlayerByName("Seth Fried")
       ],
-      overall_score: 30,
+      overall_score: -9,
       score_array: [2, 3, 3, 3, 0, 4, 3, 3, 3,
                  3, 4, 5, 2, 3, 3, 4, 3, 3, 
                  3, 4
@@ -204,7 +228,7 @@ export class GameService {
       players: [this.playerService.getPlayerByName("Min Lim"),
                 this.playerService.getPlayerByName("Arjun Deshmukh")
       ],
-      overall_score: 30,
+      overall_score: -2,
       score_array: [3, 3, 3, 8, 3, 3, 10, 3, 3,
                  2, 3, 3, 4, 3, 3, 2, 4, 2, 
                  2, 1
@@ -217,7 +241,7 @@ export class GameService {
       players: [this.playerService.getPlayerByName("Jack McCleary"),
                 this.playerService.getPlayerByName("Max Goetz")
       ],
-      overall_score: 30,
+      overall_score: -9,
       score_array: [3, 3, 3, 3, 3, 3, 3, 3, 3,
                  2, 3, 3, 4, 3, 3, 2, 4, 2, 
                  3, 5
@@ -228,11 +252,9 @@ export class GameService {
       rounds: [round1, round2, round3, round4, round5, round6],
       gameID: 1,
       date: "April 16",
-      winner: [this.playerService.getPlayerByName("Abby Stevens"),
-               this.playerService.getPlayerByName("Keller Fraley"),
-               this.playerService.getPlayerByName("Andrew Fan")
-              ]
+      winner: []
     }
-    this.gamesRoundsHistory.push(dummyData);
+    //this.gamesRoundsHistory.push(dummyData);
+    this.submitRound(dummyData);
   }
 }

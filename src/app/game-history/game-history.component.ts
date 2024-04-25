@@ -9,7 +9,7 @@ import { par_new_holes } from '../game/holes.constant';
   styleUrl: './game-history.component.css'
 })
 export class GameHistoryComponent implements OnInit {
-
+  public static reset = false;
   //gameHistory: Game[] | undefined;
   gameWithRoundsHistory: GameWithRounds[] = [];
   allRounds: Round[] = [];
@@ -20,16 +20,14 @@ export class GameHistoryComponent implements OnInit {
   ngOnInit(): void {
     // this.gameHistory = this.gameService.getGamesHistory();
     this.gameWithRoundsHistory = this.gameService.getGamesRoundHistory();
-    //console.log('Game History Data:', this.gameWithRoundsHistory);
-    // this.allRounds = [];
-    this.gameService.initializeDummyData();
-
-    // Iterate over each gameWithRounds in the array
-    for (let game of this.gameWithRoundsHistory) {
-      // Concatenate all rounds from each game into the allRounds array
-      this.allRounds.push(...game.rounds);
+    if(!GameHistoryComponent.reset) {
+      GameHistoryComponent.reset = true;
+      this.gameService.initializeDummyData();
     }
   }
+
+ 
+  
   public static Route = {
     path: 'game-history',
     component: GameHistoryComponent
@@ -43,11 +41,27 @@ export class GameHistoryComponent implements OnInit {
     return round.players.map(player => player.name).join(', ');
   }
 
-  sumScore(score: number[]): number {
-    return score.reduce((acc, curr) => acc + curr, 0);
-  }
+  // sumScore(score: number[]): number {
+  //   return score.reduce((acc, curr) => acc + curr, 0);
+  // }
 
   soloTeamLabel(soloGame: boolean): string {
     return soloGame ? 'Solo' : 'Team';
+  }
+  plusOrMinus(score: number): string {
+    if(score == 0) {
+      return '' + score;
+    } else if (score > 0) {
+      return '+' + score;
+    } else {
+      return '' + score;
+    }
+  }
+  winnerString(game: GameWithRounds): string {
+    let winnerString = '';
+    for(let player of game.winner) {
+      winnerString += player.name + ', ';
+    }
+    return winnerString;
   }
 }

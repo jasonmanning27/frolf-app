@@ -20,6 +20,7 @@ import { GameHistoryComponent } from './game-history/game-history.component';
 import { RoundComponent } from './round/round.component';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 
 
 
@@ -46,6 +47,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatCheckboxModule,
     MatExpansionModule,
     MatDialogModule, 
+    MatSortModule, 
+    MatSort,
   ],
   providers: [
     provideClientHydration(),

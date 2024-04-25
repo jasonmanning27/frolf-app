@@ -1,27 +1,26 @@
 <mat-card>
-  
-  <mat-table [dataSource]="players" class="mat-elevation-z8">
-    <!-- Name Column -->
+  <mat-table [dataSource]="sortedPlayers" matSort (matSortChange)="sortData($event)" class="mat-elevation-z8">
+    
     <ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header="name"> Name </mat-header-cell>
       <mat-cell *matCellDef="let player"> {{player.name}} </mat-cell>
     </ng-container>
   
-    <!-- Overall Score Column -->
+    
     <ng-container matColumnDef="score">
-      <mat-header-cell *matHeaderCellDef> Overall Score </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header="score"> Overall Score </mat-header-cell>
       <mat-cell *matCellDef="let player"> {{player.score}} </mat-cell>
     </ng-container>
   
-    <!-- Rating Column -->
+    
     <ng-container matColumnDef="rating">
-      <mat-header-cell *matHeaderCellDef> Rating </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header="rating"> Rating </mat-header-cell>
       <mat-cell *matCellDef="let player"> {{player.rating}} </mat-cell>
     </ng-container>
   
-    <!-- Rank Column -->
+
     <ng-container matColumnDef="rank">
-      <mat-header-cell *matHeaderCellDef> Rank </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header="rank"> Rank </mat-header-cell>
       <mat-cell *matCellDef="let player"> {{player.rank}} </mat-cell>
     </ng-container>
   
