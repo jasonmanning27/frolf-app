@@ -3,6 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { NewGameComponent } from './new-game/new-game.component';
 import { GameHistoryComponent } from './game-history/game-history.component';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+
 
 const routes: Routes = [
   HomeComponent.Route,
@@ -12,6 +14,8 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [{provide: LocationStrategy, useClass: HashLocationStrategy}]
+
 })
 export class AppRoutingModule { }
