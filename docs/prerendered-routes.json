@@ -1,0 +1,7 @@
+{
+  "routes": [
+    "/",
+    "/game-history",
+    "/new-game"
+  ]
+}
