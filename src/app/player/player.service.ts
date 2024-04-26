@@ -5,6 +5,9 @@ import { Player } from './player.model'; // Adjust the path as necessary
   providedIn: 'root'
 })
 export class PlayerService {
+  static getPlayers(): Player[] {
+      throw new Error("Method not implemented.");
+  }
   private players: Player[] = [];
   private darksiders: Player[] = [];
   private pleiads: Player[] = [];
@@ -40,17 +43,39 @@ export class PlayerService {
 
   // Service Methods
   getPlayers(): Player[] {
-    console.log(this.players);
+    // console.log(this.players);
     return this.players;
   }
 
-  getPlayer(id: number): Player | undefined {
-    return this.players.find(player => player.id === id);
+  getPlayer(id: number): Player {
+    const player = this.players.find(player => player.id === id);
+    if (!player) {
+      throw new Error(`Player with name ${id} not found`);
   }
+    return player;
+  }
+
+  getPlayerByName(name: string): Player {
+    const player = this.players.find(player => player.name === name);
+    if (!player) {
+        throw new Error(`Player with name ${name} not found`);
+    }
+    return player;
+}
+
 
   addPlayer(player: Player): void {
     this.players.push(player);
   }
 
+
+  updateScore(id: number, score: number): void {
+    let player = this.players.find(player => player.id === id);
+    if(player) {
+      console.log(player.name, ": Current Score: ", player.score)
+      player.score = player.score + score;
+      console.log(player.name, ": Updated Score: ", player.score)
+    }
+  }
   // Additional methods as needed (e.g., deletePlayer, updatePlayer)
 }

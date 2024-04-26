@@ -1,0 +1,25 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  mat-card {
+    margin: 20px;
+    padding: 20px;
+  }
+
+  .no-shadow {
+    border-bottom: 1px solid #e0e0e0; /* Light gray border */
+    box-shadow: none !important;
+  }
+  
+  /* Removes the border from the last panel to keep the UI clean */
+  .no-shadow:last-child {
+    border-bottom: none;
+  }

@@ -1,3 +1,4 @@
+
 <mat-card *ngIf="game">
   <mat-card-header>
     <mat-card-title>Players in game: {{ game.players.length }}</mat-card-title>
@@ -20,48 +21,62 @@
           <li *ngFor="let player of team">{{ player.name }}</li>
       </ol>
     </div>
-
   </mat-card-content>
+
 </mat-card>
 
-<mat-card>
-  <div *ngIf="game">
-    <mat-card-header>
-      <mat-card-title>Scorecard</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <mat-table [dataSource]="teams">
+<mat-card *ngIf="gameWithRounds">
+  <h1>Rounds Scorecard</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Teams</th>
+        <th>Overall Score</th> <!-- Header for the Overall Score -->
 
-        <!-- Team Names Column -->
-        <ng-container matColumnDef="team">
-          <mat-header-cell *matHeaderCellDef> Teams </mat-header-cell>
-          <mat-cell *matCellDef="let team">
-            <ul class="player-list">  
-              <li *ngFor="let player of team">{{ player.name }}</li>
-            </ul>
-          </mat-cell>
-        </ng-container>
-        <!-- Dynamic Columns for Holes -->
-        <ng-container *ngFor="let hole of game.holes" [matColumnDef]="hole.name">
-          <mat-header-cell *matHeaderCellDef> 
-            <div>{{ hole.name }}</div>
-            <div>(Par {{ hole.par }}) </div>
-          </mat-header-cell>
-          <mat-cell *matCellDef="let team; let i = index">
-            <div class="score-control">
-              <input type="number" [(ngModel)]="teamScores[i][game.holes.indexOf(hole)]">
-            </div>
-          </mat-cell>
-        </ng-container>
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-      </mat-table>
-    </mat-card-content>
-  
-    <mat-card-content>
-      <button mat-stroked-button (click)="submitScorecard(this.game)">Submit scores</button>
-    </mat-card-content>
-  </div>
+        <th *ngFor="let hole of this.gameHoles; trackBy: trackHole">{{ hole.name }} (Par {{ hole.par }})</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let round of gameWithRounds?.rounds; let roundIndex = index; trackBy: trackRound">
+        <td>
+          <ng-container *ngFor="let player of round.players; let isLast = last; trackBy: trackPlayer">
+            {{ player.name }}<ng-container *ngIf="!isLast">, </ng-container>
+          </ng-container>
+        </td>
+        <td>{{ calculateOverallScore(round.score_array) }}</td> <!-- Display the Overall Score -->
+
+        <td *ngFor="let score of round.score_array; let holeIndex = index; trackBy: trackScore">
+          <input type="number" [(ngModel)]="round.score_array[holeIndex]">
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <button mat-stroked-button (click)="submitRoundsScorecard(this.gameWithRounds)">Submit scores</button>
 </mat-card>
 
-  
+
+
+
+<!-- TEST -->
+<!-- <mat-card *ngIf="gameWithRounds">
+  <h1>Test Rounds Scorecard</h1>
+  <table>
+    <tr>
+      <th>Teams</th>
+      <th *ngFor="let hole of this.gameHoles">{{ hole.name }} (Par {{ hole.par }})</th>
+    </tr>
+    <ng-container *ngFor="let round of gameWithRounds?.rounds; let roundIndex = index">
+      <tr>
+        <td>
+          <ng-container *ngFor="let player of round.players; let isLast = last">
+            {{ player.name }}<ng-container *ngIf="!isLast">, </ng-container>
+          </ng-container>
+        </td>
+        <td *ngFor="let score of round.score_array; let holeIndex = index">
+          <input type="number" [(ngModel)]="round.score_array[holeIndex]">
+        </td>
+      </tr>
+    </ng-container>
+  </table>
+  <button mat-stroked-button (click)="submitRoundsScorecard(this.gameWithRounds)">Submit scores</button>
+</mat-card> -->

@@ -1,32 +1,121 @@
 
 
 <!-- game-history.component.html -->
-<h2>Game History[WIP]</h2>
 
-<mat-card *ngIf="gameHistory && gameHistory.length; else noHistory">
-  <ul>
-    <li *ngFor="let game of gameHistory; let i = index">
-        <mat-card>
-                <h3>Game {{ i + 1 }} to be replaced with GameID and date</h3>
-        <p>Number of Players: {{ game.players.length }}</p>
-        <p>Number of Holes: {{ game.holes.length }} will also indicate course</p>
-        <!-- Optionally display more details about each game -->
-        <div *ngFor="let player of game.players">
-            <mat-card>
-              <p>Player: {{ player.name }}</p>
-              <ul>
-                <li *ngFor="let hole of game.holes">
-                  Hole {{ hole.number }} (Par {{ hole.par }}): 
-                  Score: {{ getScore(game.scores, player.id, hole.number) }}
-                </li>
-              </ul>
-            </mat-card>
-          </div>
-        </mat-card>
-    </li>
-  </ul>
+<mat-card>
+  <mat-card-header class="game-header">
+    <mat-card-title>All Game History</mat-card-title>
+    <mat-card-subtitle>Click on a game to see more</mat-card-subtitle>
+  </mat-card-header>
+  <mat-expansion-panel class="no-shadow" *ngFor="let game of gameWithRoundsHistory">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Game ID: {{ game.gameID }} - {{ soloTeamLabel(game.rounds[0].soloGame) }} - {{ game.date }} - {{ winnerString(game) }}
+      </mat-panel-title>
+      <mat-panel-description>
+        expand rounds
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <mat-table [dataSource]="game.rounds">
+      <!-- Players Column -->
+      <ng-container matColumnDef="players">
+        <mat-header-cell *matHeaderCellDef> Players </mat-header-cell>
+        <mat-cell *matCellDef="let round"> {{ getPlayers(round) }} </mat-cell>
+      </ng-container>
+  
+      <!-- Solo/Team Column -->
+      <ng-container matColumnDef="soloTeam">
+        <mat-header-cell *matHeaderCellDef> Solo/Team </mat-header-cell>
+        <mat-cell *matCellDef="let round"> {{ soloTeamLabel(round.soloGame) }} </mat-cell>
+      </ng-container>
+  
+      <!-- Date Column -->
+      <ng-container matColumnDef="date">
+        <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
+        <mat-cell *matCellDef="let round"> {{ round.date }} </mat-cell>
+      </ng-container>
+  
+      <!-- Round Score Column -->
+      <ng-container matColumnDef="roundScore">
+        <mat-header-cell *matHeaderCellDef> Round Score </mat-header-cell>
+        <mat-cell *matCellDef="let round"> {{ round.overall_score + par_new }} ( {{plusOrMinus(round.overall_score)}} ) </mat-cell>
+      </ng-container>
+  
+      <!-- Scores Column -->
+      <ng-container matColumnDef="scores">
+        <mat-header-cell *matHeaderCellDef> Scores </mat-header-cell>
+        <mat-cell *matCellDef="let round"> {{ round.score_array }} </mat-cell>
+      </ng-container>
+  
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+  </mat-expansion-panel>
+
 </mat-card>
+<!-- CODE TO DISPLAY ALL ROUNDS INSTEAD OF ALL GAMES -> DROPDOWN -> ROUNDS
+<mat-table [dataSource]="allRounds">
 
-<ng-template #noHistory>
-  <p>No game history available.</p>
-</ng-template>
+  <ng-container matColumnDef="players">
+    <mat-header-cell *matHeaderCellDef> Players </mat-header-cell>
+    <mat-cell *matCellDef="let round"> {{ getPlayers(round) }} </mat-cell>
+  </ng-container>
+
+
+  <ng-container matColumnDef="soloTeam">
+    <mat-header-cell *matHeaderCellDef> Solo/Team </mat-header-cell>
+    <mat-cell *matCellDef="let round"> {{ soloTeamLabel(round.soloGame) }} </mat-cell>
+  </ng-container>
+
+  
+  <ng-container matColumnDef="date">
+    <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
+    <mat-cell *matCellDef="let round"> {{ round.date }} </mat-cell>
+  </ng-container>
+
+
+  <ng-container matColumnDef="roundScore">
+    <mat-header-cell *matHeaderCellDef> Round Score </mat-header-cell>
+    <mat-cell *matCellDef="let round"> {{ sumScore(round.numScore) }} ( {{sumScore(round.numScore) - par_new}} ) </mat-cell>
+  </ng-container>
+
+
+  <ng-container matColumnDef="scores">
+    <mat-header-cell *matHeaderCellDef> Scores </mat-header-cell>
+    <mat-cell *matCellDef="let round"> {{ round.numScore }} </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table> -->
+
+
+<!-- old table not using angular material ui -->
+<!-- <h2>Game History[WIP]</h2>
+
+<mat-card>
+  <table>
+    <thead>
+      <tr>
+        <th>Players</th>
+        <th>Solo/Team</th>
+        <th>Date</th>
+        <th>Round Score</th>
+        <th>Scores</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let game of gameWithRoundsHistory">
+        <tr *ngFor="let round of game.rounds">
+          <td>{{ getPlayers(round) }}</td>
+          <td>{{ soloTeamLabel(round.soloGame) }}</td>
+          <td>{{ round.date }}</td>
+          <td>{{ sumScore(round.numScore) }} </td>
+          <td>{{ round.numScore }}</td>
+        </tr>
+      </ng-container>
+      
+    </tbody>
+  </table>
+</mat-card>
+ -->
