@@ -12,13 +12,13 @@ const routes: Routes = [
   GameHistoryComponent.Route,
 ];
 
-const routes2: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'new-game', component: NewGameComponent },
-  { path: 'game-history', component: GameHistoryComponent }
-]
+// const routes2: Routes = [
+//   { path: '', component: HomeComponent },
+//   { path: 'new-game', component: NewGameComponent },
+//   { path: 'game-history', component: GameHistoryComponent }
+// ]
 @NgModule({
-  imports: [RouterModule.forRoot(routes2, { useHash: true })],
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
   //providers: [{provide: LocationStrategy, useClass: HashLocationStrategy}]
 
