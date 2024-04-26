@@ -3,3 +3,7 @@
     margin-right: 4px; /* Smaller right margin */
     margin-left: 4px;  /* Smaller left margin */
 }
+.mat-toolbar {
+    background-color: lightblue;
+    color: black
+}
